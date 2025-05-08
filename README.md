@@ -1,10 +1,10 @@
-# app_utip
+A Very Basic Bill Split Calculator 
 
-A new Flutter project.
+Flutter Learning Project - 01
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+This project is a starting point for a Flutter Learning Journey.
 
 A few resources to get you started if this is your first Flutter project:
 
