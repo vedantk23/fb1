@@ -1,10 +1,12 @@
+import 'package:app_utip/providers/TipCalculatorModel.dart';
 import 'package:app_utip/widgets/row_widget.dart';
 import 'package:app_utip/widgets/slider_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 //import 'dart:math';
 
 void main(){
-  runApp(const MyApp());
+  runApp(ChangeNotifierProvider(create: (context)=> Tipcalculatormodel(),child: const MyApp(),));
 }
 
 class MyApp extends StatelessWidget {
@@ -13,6 +15,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
     // TODO: implement build
    return MaterialApp(
     title: 'Calculator',
@@ -35,29 +38,12 @@ State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage>{
- int counter = 1;
- double tip = 0;
- int total = 0;
- double tipCalculator(double tip){
-  return tip*100;
- }
+ 
 
- void incrementCounter(){
- setState(() {
-  if(counter<=100){
-   counter++;}
- });
-    
-  
- }
- void decrementCounter(){
-  setState(() {
-    if(counter>1){
-    counter--;}
-  });
- }
+ 
 @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<Tipcalculatormodel>(context);
    var theme = Theme.of(context);
    final style = theme.textTheme.displayMedium!.copyWith(
     color: theme.colorScheme.onPrimary,
@@ -86,7 +72,7 @@ body: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text("Total Per Person", style: style,),
-             Text("My Bill is ${((total + (total* tip))/counter).round() }",style: style.copyWith(
+             Text("My Bill is ${provider.personTotal().round() }",style: style.copyWith(
               fontSize:15,
              )),
             ]
@@ -117,12 +103,19 @@ body: Column(
               keyboardType: TextInputType.number,
               onChanged: (String value){
                 // print("Value is $value");
-                total = int.parse(value);
+                provider.updateTotal(double.parse(value));
 
               },
             ),
             //split 
-            RowWidget(theme: theme, counter: counter,onIncrement: incrementCounter,onDecrement:decrementCounter),
+            RowWidget(theme: theme, counter:provider.counter,onIncrement: (){
+             provider.updateCounter(provider.counter+1);
+            },onDecrement:(){
+              if(provider.counter>1){
+                provider.updateCounter(provider.counter-1);
+              }
+
+            }),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -132,16 +125,14 @@ body: Column(
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Text("${(tip * 100).round()}%"),
+                  child: Text("${(provider.tip * 100).round()}%"),
                 ),
               ],
             ),
-             Text("${(tip * 100).round()}%"),
-            SliderWidget(tip: tip,onChanged: 
+             Text("${(provider.tip * 100).round()}%"),
+            SliderWidget(tip: provider.tip,onChanged: 
             (double value){
-              setState(() {
-                tip = value;
-              });
+              provider.tippercentage(value);
             },),
             
 

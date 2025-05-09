@@ -10,7 +10,7 @@ class RowWidget extends StatelessWidget {
   });
 
   final ThemeData theme;
-  final int counter;
+  final double counter;
   final VoidCallback onIncrement;
   final VoidCallback onDecrement;
 
